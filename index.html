@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Shop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Neon Shop</h1>
+    <p>Achetez les meilleurs outils de modération</p>
+    <a href="#produits" class="btn">Découvrir les produits</a>
+  </header>
+
+  <section id="produits">
+    <h2>Nos Produits</h2>
+
+    <!-- PRODUIT 1 : Anti-Cheat Roblox -->
+    <div class="product">
+      <div class="product-info">
+        <h3>Anti-Cheat Roblox</h3>
+        <p>Détecte automatiquement les tricheurs et protège votre serveur en temps réel.</p>
+        <a href="#" class="btn">Acheter - 9,99€</a>
+      </div>
+      
+      <div class="product-image">
+        <img src="anti-cheat.png" alt="Anti-Cheat Roblox" />
+      </div>
+    </div>
+
+    <!-- PRODUIT 2 : Menu Modérateur -->
+    <div class="product">
+      <div class="product-info">
+        <h3>Menu Modérateur - V1</h3>
+        <p>Menu complet avec toutes les fonctions de modération essentielles.</p>
+        <a href="#" class="btn">Acheter - 14,99€</a>
+      </div>
+      
+      <div class="product-image">
+        <img src="menu-modo.png" alt="Menu Modérateur V1" />
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 - Neon Shop. Tous droits réservés.
+  </footer>
+
+  <!-- ★★★ MODAL PRODUIT SIMPLIFIÉ ★★★ -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <!-- EN-TÊTE PRODUIT -->
+      <div class="modal-header">
+        <img id="modalImage" src="" alt="" class="modal-image">
+        <div class="modal-product-info">
+          <h3 id="modalTitle"></h3>
+          <p id="modalPrice"></p>
+        </div>
+      </div>
+      
+      <!-- INSTRUCTIONS DISCORD UNIQUES -->
+      <div class="modal-discord">
+        <h4> Comment acheter ?</h4>
+        <div class="discord-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <p>Rejoignez notre <strong>Serveur Discord</strong></p>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <p>Créez un <strong>Ticket</strong> dans le canal #️『📨』tickets</p>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <p>Indiquez le <strong>nom du produit</strong> ci-dessus</p>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <p>Un modérateur vous <strong>contactera</strong> sous 5min minimum.</p>
+          </div>
+        </div>
+        
+        <!-- LIEN DISCORD -->
+        <a href="https://discord.gg/eGVJqquuKG" target="_blank" class="discord-btn">
+           Rejoindre Discord
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ★★★ JAVASCRIPT CORRIGÉ ★★★ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. NEIGE ANIMÉE
+      function createSnow() {
+        const snow = document.createElement('div');
+        snow.className = 'snow-point';
+        snow.style.left = Math.random() * 100 + 'vw';
+        snow.style.width = snow.style.height = (Math.random() * 4 + 1) + 'px';
+        snow.style.animationDuration = (Math.random() * 3 + 8) + 's';
+        snow.style.opacity = Math.random();
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), 12000);
+      }
+      setInterval(createSnow, 200);
+
+      // 2. DONNÉES PRODUITS
+      const produits = [
+        {
+          title: 'Anti-Cheat Roblox',
+          price: '9.99€',
+          image: 'anti-cheat.png'
+        },
+        {
+          title: 'Menu Modérateur - V1',
+          price: '14.99€',
+          image: 'menu-modo.png'
+        }
+      ];
+
+      // 3. MODAL SYSTEM
+      const modal = document.getElementById('productModal');
+      const closeBtn = document.querySelector('.close');
+
+      // CLIC BOUTONS ACHAT - UTILISE L'INDEX
+      document.querySelectorAll('.product .btn').forEach((btn, index) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          const produit = produits[index];
+          
+          // REMPLIR MODAL
+          document.getElementById('modalTitle').textContent = produit.title;
+          document.getElementById('modalPrice').textContent = produit.price;
+          document.getElementById('modalImage').src = produit.image;
+          
+          modal.style.display = 'block';
+        });
+      });
+
+      // FERMER MODAL
+      closeBtn.onclick = () => modal.style.display = 'none';
+      window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+      // 4. EFFETS 3D SOURIS
+      document.querySelectorAll('.product-image').forEach(container => {
+        const img = container.querySelector('img');
+        container.addEventListener('mousemove', (e) => {
+          const rect = container.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 10;
+          const rotateY = (centerX - x) / 10;
+          img.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) scale(1.05)`;
+        });
+        container.addEventListener('mouseleave', () => {
+          img.style.transform = 'scale(1)';
+        });
+      });
+
+      // 5. HOVER CARDS
+      document.querySelectorAll('.product').forEach(product => {
+        product.addEventListener('mouseenter', () => {
+          product.style.transform = 'translateY(-8px)';
+        });
+        product.addEventListener('mouseleave', () => {
+          product.style.transform = 'translateY(0)';
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
